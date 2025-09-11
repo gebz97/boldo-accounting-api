@@ -13,30 +13,33 @@ import eg.boldo.accounting.currency.model.ExchangeRate;
 
 public interface ExchangeRateRepository extends JpaRepository<ExchangeRate, Long> {
 
-    Optional<ExchangeRate> findByBaseCurrencyAndTargetCurrencyAndRateDate(
-            Currency baseCurrency, Currency targetCurrency, LocalDate rateDate);
+        Optional<ExchangeRate> findByBaseCurrencyAndTargetCurrencyAndRateDate(
+                        Currency baseCurrency, Currency targetCurrency, LocalDate rateDate);
 
-    List<ExchangeRate> findByBaseCurrency(Currency baseCurrency);
+        List<ExchangeRate> findByRateDate(LocalDate date);
 
-    List<ExchangeRate> findByTargetCurrency(Currency targetCurrency);
+        List<ExchangeRate> findByBaseCurrency(Currency baseCurrency);
 
-    List<ExchangeRate> findByRateDateBetween(LocalDate start, LocalDate end);
+        List<ExchangeRate> findByTargetCurrency(Currency targetCurrency);
 
-    List<ExchangeRate> findByBaseCurrencyAndTargetCurrency(Currency baseCurrency, Currency targetCurrency);
+        List<ExchangeRate> findByRateDateBetween(LocalDate start, LocalDate end);
 
-    List<ExchangeRate> findByBaseCurrencyAndRateDateBetween(Currency baseCurrency, LocalDate start, LocalDate end);
+        List<ExchangeRate> findByBaseCurrencyAndTargetCurrency(Currency baseCurrency, Currency targetCurrency);
 
-    List<ExchangeRate> findByTargetCurrencyAndRateDateBetween(Currency targetCurrency, LocalDate start, LocalDate end);
+        List<ExchangeRate> findByBaseCurrencyAndRateDateBetween(Currency baseCurrency, LocalDate start, LocalDate end);
 
-    List<ExchangeRate> findByBaseCurrencyAndTargetCurrencyAndRateDateBetween(
-            Currency baseCurrency, Currency targetCurrency, LocalDate start, LocalDate end);
+        List<ExchangeRate> findByTargetCurrencyAndRateDateBetween(Currency targetCurrency, LocalDate start,
+                        LocalDate end);
 
-    @Query(value = "SELECT * FROM exchange_rates e " +
-            "WHERE e.base_currency = :base AND e.target_currency = :target " +
-            "ORDER BY e.rate_date DESC " +
-            "LIMIT :n", nativeQuery = true)
-    List<ExchangeRate> findTopNByBaseCurrencyAndTargetCurrencyOrderByRateDateDesc(
-            @Param("base") Currency baseCurrency,
-            @Param("target") Currency targetCurrency,
-            @Param("n") int n);
+        List<ExchangeRate> findByBaseCurrencyAndTargetCurrencyAndRateDateBetween(
+                        Currency baseCurrency, Currency targetCurrency, LocalDate start, LocalDate end);
+
+        @Query(value = "SELECT * FROM exchange_rates e " +
+                        "WHERE e.base_currency = :base AND e.target_currency = :target " +
+                        "ORDER BY e.rate_date DESC " +
+                        "LIMIT :n", nativeQuery = true)
+        List<ExchangeRate> findTopNByBaseCurrencyAndTargetCurrencyOrderByRateDateDesc(
+                        @Param("base") Currency baseCurrency,
+                        @Param("target") Currency targetCurrency,
+                        @Param("n") int n);
 }
