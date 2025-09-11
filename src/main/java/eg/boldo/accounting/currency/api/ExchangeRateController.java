@@ -3,6 +3,7 @@ package eg.boldo.accounting.currency.api;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import eg.boldo.accounting.currency.dto.ExchangeRateRequest;
 import eg.boldo.accounting.currency.dto.ExchangeRateResponse;
 import eg.boldo.accounting.currency.service.ExchangeRateService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,8 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/exchange-rates")
@@ -41,7 +43,17 @@ public class ExchangeRateController {
             @PathVariable String dateVar) {
         try {
             LocalDate parsed = LocalDate.parse(dateVar);
-            ExchangeRateResponse result = exchangeRateService.getB
+            return ResponseEntity.ok(exchangeRateService.getByBaseTargetAndDate(baseVar, targetVar, parsed).get());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
     }
+    
+    @PostMapping
+    public ResponseEntity<ExchangeRateResponse> postOne(@RequestBody ExchangeRateRequest request) {
+        ExchangeRateResponse response = exchangeRateService.create(request);
+        return ResponseEntity.ok(response);
+    }
+
+
 }
